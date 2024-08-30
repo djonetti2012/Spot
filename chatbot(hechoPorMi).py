@@ -6,7 +6,7 @@ from groq import Groq
 # Establecer la variable de entorno
 os.environ["GROQ_API_KEY"] = "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"
 llamar_pregunta = ["tengo una pregunta", "pregunta", "tengo una duda", "duda", "responde", "explicame"]
-
+llamar_pregunta_ingenieria = ["ayudame en robotica", "ayudame en informatica", "ayudame en ingenieria", "ayudame con esta pregunta de robotica", "tengo una duda en robotica", "tengo una duda en informatica", "ayudame en informatica"]
 client = Groq(
         api_key=os.environ.get("GROQ_API_KEY"),
 )
@@ -18,6 +18,7 @@ comandos = {
     "pregunta": "puedes preguntar cualquier cosa que la inteligencia artificial te lo respondera",
     "crear nota": "podras crear todo tipo de notas o apuntes",
     "ver nota": "podras ver las notas creadas",
+    "preguntas robotica": "podras preguntarle cualquier cosa de ingenieria",
     }
 ruta_actual = os.getcwd()
 
@@ -53,12 +54,11 @@ def procesar_comando(comando):
         speak("¿que duda tiene señor?")
         pregunta = escuchar_comando()
         if pregunta is not None:
-            # Inicializar el cliente de Groq con la clave API desde la variable de entorno
-            
 
             # Crear la solicitud de chat completion
             chat_completion = client.chat.completions.create(
                 messages=[
+
                     {
                         "role": "user",
                         "content": pregunta,
@@ -70,6 +70,78 @@ def procesar_comando(comando):
             # Imprimir la respuesta
             print(chat_completion.choices[0].message.content)
             speak(chat_completion.choices[0].message.content)
+            texto_chat = chat_completion.choices[0].message.content
+            
+            speak("¿te gustaria guardar el texto del chat?")
+            te_gustaria_guardar_el_texto_del_chat = escuchar_comando()
+            if te_gustaria_guardar_el_texto_del_chat is not None:
+                if "si" in te_gustaria_guardar_el_texto_del_chat or "sí" in te_gustaria_guardar_el_texto_del_chat:
+                    os.chdir(carpeta_notas)
+                    speak("¿Cual es el titulo del chat?")
+                    titulo_chat = escuchar_comando()
+                    if titulo_chat is not None:
+                        speak(f"¿El titulo para el chat es {titulo_chat}?")
+                        confirmacion = escuchar_comando()
+                        if confirmacion is not None:
+                            if "sí" in confirmacion or "si" in confirmacion:
+                                f = open(f"{titulo_chat}.txt", "w")
+                                f.write(f"{texto_chat}")
+                                os.chdir(ruta_actual)
+                                speak("chat guardado correctamente")
+                            elif "no" in confirmacion:
+                                speak("de acuerdo señor")
+            else:
+                speak("No recibi confirmación")
+
+
+    elif any(frase in comando for frase in llamar_pregunta_ingenieria):
+            speak("¿que duda tiene señor?")
+            pregunta = escuchar_comando()
+            if pregunta is not None:
+
+                # Crear la solicitud de chat completion
+                chat_completion = client.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "eres un ayudante personal para un adolescente en robotica, programacion, ingenieria aerospacial y ingenieria, tienes que ayudarle a crear todo lo que te pida dandole componentes, codigo, muchos detalles y ayudarle en lo que necesite",
+                        },
+                        {
+                            "role": "user",
+                            "content": pregunta,
+                        }
+                    ],
+                    model="llama3-8b-8192",
+                )
+
+                # Imprimir la respuesta
+                print(chat_completion.choices[0].message.content)
+                speak(chat_completion.choices[0].message.content)
+                texto_chat = chat_completion.choices[0].message.content
+            
+                speak("¿te gustaria guardar el texto del chat?")
+                te_gustaria_guardar_el_texto_del_chat = escuchar_comando()
+                if te_gustaria_guardar_el_texto_del_chat is not None:
+                    if "si" in te_gustaria_guardar_el_texto_del_chat or "sí" in te_gustaria_guardar_el_texto_del_chat:
+                        os.chdir(carpeta_notas)
+                        speak("¿Cual es el titulo del chat?")
+                        titulo_chat = escuchar_comando()
+                        if titulo_chat is not None:
+                            speak(f"¿El titulo para el chat es {titulo_chat}?")
+                            confirmacion = escuchar_comando()
+                            if confirmacion is not None:
+                                if "sí" in confirmacion or "si" in confirmacion:
+                                    f = open(f"{titulo_chat}.txt", "w")
+                                    f.write(f"{texto_chat}")
+                                    os.chdir(ruta_actual)
+                                    speak("chat guardado correctamente")
+                                elif "no" in confirmacion:
+                                    speak("de acuerdo señor")
+                else:
+                    speak("No recibi confirmación")
+
+
+            
             
 
 
@@ -217,6 +289,17 @@ def procesar_comando(comando):
         text_to_say = escuchar_comando()
         if text_to_say is not None:
             speak(text_to_say)
+
+    elif "apagar pc" in comando or "apagar ordenador" in comando or "apagar" in comando:
+        speak("¿seguro?")
+        seguro = escuchar_comando()
+        if seguro is not None:
+            if "si" in seguro or "sí" in seguro:
+                os.system("shutdown -s -t 5")
+            elif "no" in seguro:
+                speak("de acuerdo señor")
+            else:
+                speak("no pude entender la confirmacion")
 
     elif "comandos" in comando:
         print(comandos)
