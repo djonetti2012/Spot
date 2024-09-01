@@ -2,6 +2,7 @@ import pyttsx3
 import speech_recognition as sr
 import os
 from groq import Groq
+import pyautogui as pg
 
 # Establecer la variable de entorno
 os.environ["GROQ_API_KEY"] = "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"
@@ -18,7 +19,7 @@ comandos = {
     "pregunta": "puedes preguntar cualquier cosa que la inteligencia artificial te lo respondera",
     "crear nota": "podras crear todo tipo de notas o apuntes",
     "ver nota": "podras ver las notas creadas",
-    "preguntas robotica": "podras preguntarle cualquier cosa de ingenieria",
+    "preguntas ingenieria": "podras preguntarle cualquier cosa de ingenieria",
     }
 ruta_actual = os.getcwd()
 
@@ -289,6 +290,25 @@ def procesar_comando(comando):
         text_to_say = escuchar_comando()
         if text_to_say is not None:
             speak(text_to_say)
+
+    elif "modo hackeo" in comando:
+        speak("modo hackeo activado")
+        ModoHackeoActivado = True
+        while ModoHackeoActivado == True:
+            speak("ha dicho que quiere el modo hackeo")
+            confirmacion = escuchar_comando()
+            if "si" in confirmacion or "sí" in confirmacion:
+                speak("Modo hackeo Activado")
+                print("Modo hackeo Activado")
+
+            elif "no" in confirmacion:
+                speak("Activacion del modo hackeo cancelada")
+                print("Activacion del modo hackeo cancelada")
+                ModoHackeoActivado = False
+            else:
+                speak("No Entendi la confirmación, desactivando modo hackeo")
+                print("No Entendi la confirmación, desactivando modo hackeo")
+                ModoHackeoActivado = False
 
     elif "apagar pc" in comando or "apagar ordenador" in comando or "apagar" in comando:
         speak("¿seguro?")
