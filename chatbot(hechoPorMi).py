@@ -3,6 +3,8 @@ import speech_recognition as sr
 import os
 from groq import Groq
 import pyautogui as pg
+import pygame
+import random
 
 # Establecer la variable de entorno
 os.environ["GROQ_API_KEY"] = "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"
@@ -15,11 +17,14 @@ client = Groq(
 engine = pyttsx3.init()
 reconocedor = sr.Recognizer()
 carpeta_notas = "notas"
+carpeta_musica = "musica"
 comandos = {
     "pregunta": "puedes preguntar cualquier cosa que la inteligencia artificial te lo respondera",
     "crear nota": "podras crear todo tipo de notas o apuntes",
     "ver nota": "podras ver las notas creadas",
     "preguntas ingenieria": "podras preguntarle cualquier cosa de ingenieria",
+    "apagar": "podras apagar el pc",
+    "di": "podras hacer que spot diga cualquier cosa",
     }
 ruta_actual = os.getcwd()
 
@@ -44,6 +49,18 @@ def escuchar_comando():
             print("Error en el servicio de reconocimiento de voz.")
             speak("Error en el servicio de reconocimiento de voz.")
             return None
+
+def reproducir_musica(nombre_archivo):
+    try:
+        pygame.mixer.init()
+        pygame.mixer.music.load(nombre_archivo)
+        pygame.mixer.music.play()
+        
+        # Esperar hasta que termine de reproducir
+        while pygame.mixer.music.get_busy():
+            pygame.time.Clock().tick(10)
+    except Exception as e:
+        speak(f"Error al reproducir el archivo de música: {e}")
 
 
 def procesar_comando(comando):
@@ -91,8 +108,13 @@ def procesar_comando(comando):
                                 speak("chat guardado correctamente")
                             elif "no" in confirmacion:
                                 speak("de acuerdo señor")
+                elif "no":
+                    speak("de acuerdo señor")
+                    print("de acuerdo señor")
+                    
             else:
                 speak("No recibi confirmación")
+                
 
 
     elif any(frase in comando for frase in llamar_pregunta_ingenieria):
@@ -290,6 +312,92 @@ def procesar_comando(comando):
         text_to_say = escuchar_comando()
         if text_to_say is not None:
             speak(text_to_say)
+
+    elif "modo desarrollo" in comando:
+        ModoDesarrollo = True
+        carpeta_musica = "musica"  # Asegúrate de tener una carpeta llamada "musica" con archivos de música
+        ruta_actual = os.getcwd()  # Guarda la ruta actual
+        os.chdir(carpeta_musica)
+
+        # Inicializar pygame mixer
+        pygame.mixer.init()
+    
+        while ModoDesarrollo:
+            speak("¿Qué música quiere escuchar, señor?")
+    
+            # Cambia el directorio a la carpeta de música
+            
+    
+            # Obtener la lista de archivos de música
+            musicas = os.listdir()
+            if musicas:
+                # Enumerar y anunciar las opciones de música disponibles
+                for i, musica in enumerate(musicas):
+                    print(f"{i + 1}. {musica}")
+                    speak(f"Música número {i + 1}: {musica}")
+            
+                # Ofrecer la opción de seleccionar aleatoriamente
+                speak("Puede decir un número o decir 'aleatoria' para reproducir una música al azar.")
+            
+                # Diccionario para convertir palabras a números
+                palabras_a_numeros = {
+                    "uno": 1,
+                    "dos": 2,
+                    "tres": 3,
+                    "cuatro": 4,
+                    "cinco": 5,
+                    "seis": 6,
+                    "siete": 7,
+                    "ocho": 8,
+                    "nueve": 9,
+                    "diez": 10,
+                    "1": 1,
+                    "2": 2,
+                    "3": 3,
+                    "4": 4,
+                    "5": 5,
+                    "6": 6,
+                    "7": 7,
+                    "8": 8,
+                    "9": 9,
+                    "10": 10,
+                    "aleatoria": "aleatoria",
+                }
+
+                num_palabra = escuchar_comando()
+
+                if num_palabra in palabras_a_numeros:
+                    if num_palabra == "aleatoria":
+                        nombre_archivo = random.choice(musicas)
+                    else:
+                        num_musica = palabras_a_numeros[num_palabra]
+                        if 1 <= num_musica <= len(musicas):
+                            nombre_archivo = musicas[num_musica - 1]
+                        else:
+                            speak("Número de música inválido.")
+                            continue
+
+                    print(f"Reproduciendo {nombre_archivo}...")
+                    speak(f"Reproduciendo {nombre_archivo}")
+                    reproducir_musica(nombre_archivo)
+
+                    # Preguntar si se quiere seguir en modo desarrollo
+                    speak("¿Todavía está desarrollando, señor?")
+                    confirmacion = escuchar_comando()
+                    if "si" in confirmacion or "sí" in confirmacion:
+                        speak("De acuerdo, señor")
+                    else:
+                        os.chdir(ruta_actual)
+                        speak("Desactivando modo desarrollo")
+                        ModoDesarrollo = False
+                else:
+                    speak("No entendí el comando. Intenta de nuevo.")
+            else:
+                speak("No hay música en la carpeta.")
+                os.chdir(ruta_actual)
+                ModoDesarrollo = False
+
+        
 
     elif "modo hackeo" in comando:
         speak("modo hackeo activado")
