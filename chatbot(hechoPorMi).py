@@ -123,6 +123,10 @@ def check_events():
                         contenido = f.read()
                         titulo, texto = contenido.split(" ")
                         listaDeEventosDeHoy.append(titulo)
+    
+    if listaDeEventosDeHoy == []:
+        print("Hoy no hay ningun evento")
+        speak("Hoy no hay ningun evento")
 
             
              
