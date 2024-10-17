@@ -5,6 +5,123 @@ from groq import Groq
 import pyautogui as pg
 import pygame
 import random
+import webbrowser as wb
+import ctypes
+import re
+import winreg
+import datetime as date
+
+
+
+def check_events():
+    date.datetime.today()
+
+
+def comprobar_fecha(d, m, y):
+    comprobaciones = 0
+    days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+    months = {
+        "uno": "january",
+        "uno": "January",
+        "1": "january",
+        "1": "January",
+        "one": "february",
+        "one": "February",
+        "dos": "february",
+        "dos": "February",
+        "2": "february",
+        "2": "February",
+        "two": "february",
+        "two": "February",
+        "tres": "march",
+        "tres": "March",
+        "3": "march",
+        "3": "March",
+        "three": "march",
+        "Three": "march",
+        "quatro": "april",
+        "quatro": "April",
+        "4": "april",
+        "4": "April",
+        "four": "april",
+        "four": "April",
+        "cinco": "may",
+        "cinco": "May",
+        "5": "may",
+        "5": "May",
+        "seis": "june",
+        "seis": "June",
+        "6": "june",
+        "6": "June",
+        "six": "june",
+        "six": "June",
+        "siete": "july",
+        "siete": "July",
+        "7": "july",
+        "7": "July",
+        "seven": "july",
+        "seven": "July",
+        "ocho": "august",
+        "ocho": "August",
+        "8": "august",
+        "8": "August",
+        "eight": "august",
+        "eight": "August",
+        "nueve": "september",
+        "nueve": "September",
+        "9": "september",
+        "9": "September",
+        "nine": "september",
+        "nine": "September",
+        "diez": "october",
+        "diez": "October",
+        "10": "october",
+        "10": "October",
+        "ten": "october",
+        "ten": "October",
+        "onze": "november",
+        "onze": "November",
+        "11": "november",
+        "11": "November",
+        "eleven": "november",
+        "eleven": "November",
+        "doze": "december",
+        "doze": "December",
+        "12": "december",
+        "12": "December",
+        "twelve": "december",
+        "twelve": "December"
+    }
+    if days in d:
+        comprobaciones = comprobaciones + 1
+    if months in m:
+        comprobaciones = comprobaciones + 1
+    if isinstance(y, int):
+        comprobaciones = comprobaciones + 1
+    
+
+def cambiar_fondo_pantalla(ruta_imagen):
+    # Verifica si la ruta existe
+    if not os.path.exists(ruta_imagen):
+        print("La ruta especificada no existe.")
+        return
+
+    # Cambia el fondo de pantalla
+    ctypes.windll.user32.SystemParametersInfoW(20, 0, ruta_imagen, 3)
+
+    # Cambia la configuración de fondo para que se rellene
+    try:
+        # Abre la clave del registro donde se guarda la configuración del fondo
+        clave = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Control Panel\Desktop", 0, winreg.KEY_SET_VALUE)
+        winreg.SetValueEx(clave, "WallpaperStyle", 0, winreg.REG_SZ, "2")  # 2 para rellenar
+        winreg.SetValueEx(clave, "TileWallpaper", 0, winreg.REG_SZ, "0")   # 0 para no azulejos
+        winreg.CloseKey(clave)
+    except Exception as e:
+        print(f"Error al modificar el registro: {e}")
+
+# Reemplaza 'ruta/a/tu/imagen.jpg' con la ruta a tu imagen
+
+
 
 # Establecer la variable de entorno
 os.environ["GROQ_API_KEY"] = "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"
@@ -18,13 +135,19 @@ engine = pyttsx3.init()
 reconocedor = sr.Recognizer()
 carpeta_notas = "notas"
 carpeta_musica = "musica"
+carpeta_webs = "webs"
+carpeta_calendario = "calendario"
+
 comandos = {
     "pregunta": "puedes preguntar cualquier cosa que la inteligencia artificial te lo respondera",
     "crear nota": "podras crear todo tipo de notas o apuntes",
-    "ver nota": "podras ver las notas creadas",
+    "ver notas": "podras ver las notas creadas",
+    "borrar notas": "podras borrar cualquier nota creada",
     "preguntas ingenieria": "podras preguntarle cualquier cosa de ingenieria",
     "apagar": "podras apagar el pc",
     "di": "podras hacer que spot diga cualquier cosa",
+    "webs importantes": "te abrira cualquier web marcada dentro de la carpeta webs",
+    "modo desarrollo": "podras elegir y escuchar música de la carpeta musica",
     }
 ruta_actual = os.getcwd()
 
@@ -305,7 +428,157 @@ def procesar_comando(comando):
             speak("No hay notas en la carpeta.")
 
         os.chdir(ruta_actual)
+
+    elif "limpiar pantalla" in comando:
+        print("""
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         """)
+
+    elif "fondo de pantalla" in comando:
+        cambiar_fondo_pantalla(r'C:\Users\ManelDíazGarcía\Downloads\Ford-Mustang-_01.jpg')
+        cambiar_fondo_pantalla(r'C:\Users\ManelDíazGarcía\Downloads\Ford-Mustang-_01.jpg')
+    
+
+    elif "crear evento" in comando:
+        os.chdir(carpeta_calendario)
+        speak("¿Cual es el titulo del evento?")
+        titulo_evento = escuchar_comando()
+        if titulo_evento is not None:
+            speak(f"¿El titulo para el evento es {titulo_evento}?")
+            confirmacion = escuchar_comando()
+            if confirmacion is not None: 
+                if "sí" in confirmacion or "si" in confirmacion:
+                    f = open(f"{titulo_evento}.txt", "w")
+                    speak("¿de que trata el evento?")
+                    texto_evento = escuchar_comando()
+                    if texto_evento is not None:
+                        speak(f"el resumen de lo que trata el evento es{texto_evento}")
+                        confirmacion = escuchar_comando()
+                        if confirmacion is not None:
+                            if "sí" in confirmacion or "si" in confirmacion:
+                                speak("para que dia es el evento?")
+                                dia_del_evento = escuchar_comando()
+                                if dia_del_evento is not None:
+                                    day = None
+                                    month = None
+                                    year= None
+                                    day, month, year = dia_del_evento.split("/")
+                                    comprobar_fecha(day, month, year)
+                                f.write(f"{texto_evento + " " + dia_del_evento}")
+                                speak("evento creada")
+                                os.chdir(ruta_actual)
+                            else:
+                                speak("no se pudo confirmar")
+                                os.chdir(ruta_actual)
+                        else:
+                            speak("no entendi el mensaje")
+                            os.chdir(ruta_actual)
+
+
+                    
+                else:
+                    speak("no se pudo confirmar")
+                    os.chdir(ruta_actual)
+            else:
+                speak("no pude entender el mensaje")
+                os.chdir(ruta_actual)
+
+
+
+    elif "webs importantes" in comando:
+        ruta_actual = os.getcwd()
+        os.chdir(carpeta_webs)
+        webs = os.listdir()
+    
+        if webs:
+            # Enumerar y anunciar las notas disponibles
+            for i, web in enumerate(webs):
+                print(f"{i + 1}. {web}")
+                speak(f"web número {i + 1}: {web}")
+
+            # Diccionario para convertir palabras a números
+            palabras_a_numeros = {
+                "uno": 1,
+                "dos": 2,
+                "tres": 3,
+                "cuatro": 4,
+                "cinco": 5,
+                "seis": 6,
+                "siete": 7,
+                "ocho": 8,
+                "nueve": 9,
+                "diez": 10,
+                "1": 1,
+                "2": 2,
+                "3": 3,
+                "4": 4,
+                "5": 5,
+                "6": 6,
+                "7": 7,
+                "8": 8,
+                "9": 9,
+                "10": 10,
+            }
+
+            speak("¿Qué número de web quiere abrir?")
+            num_palabra = escuchar_comando()
+
+            if num_palabra in palabras_a_numeros:
+                num_web = palabras_a_numeros[num_palabra]
+                if 1 <= num_web <= len(webs):
+                    nombre_archivo = webs[num_web - 1]
+                    with open(nombre_archivo, "r") as f:
+                        contenido = f.read()
+                        print(f"Contenido de {nombre_archivo}:")
+                        print(contenido)
+                        wb.open(contenido)
+                    speak(f"Web {nombre_archivo} abierta.")
+                    print(f"Web {nombre_archivo} abierta.")
+                else:
+                    speak("Número de web inválido.")
+            else:
+                speak("No entendí el número. Intenta de nuevo.")
+        else:
+            speak("No hay webs en la carpeta.")
+
+        os.chdir(ruta_actual)
+
+
+    
         
+
 
     elif "di" in comando:
         speak("que quieres que diga")
@@ -443,7 +716,7 @@ def procesar_comando(comando):
         speak("No entendí el comando. Intenta de nuevo.")
 
 def main():
-    speak("Buenos Dias señor")
+    speak("Buenos Días señor")
     while True:
         comando = escuchar_comando()
         if comando is not None:
@@ -463,6 +736,8 @@ def main():
         
 
 if __name__ == '__main__':
+    check_events()
     main()
+    
 
 
