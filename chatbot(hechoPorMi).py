@@ -119,7 +119,10 @@ def check_events():
             if yearevent in year:
                 comprobacion = comprobacion + 1
             if comprobacion >= 3:
-                pass
+                with open(event, "r") as f:
+                        contenido = f.read()
+                        titulo, texto = contenido.split(" ")
+                        listaDeEventosDeHoy.append(titulo)
 
             
              
