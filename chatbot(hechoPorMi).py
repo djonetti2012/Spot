@@ -14,7 +14,8 @@ import datetime as date
 
 
 def check_events():
-    date.datetime.today()
+    day = date.datetime.today()
+
 
 
 def comprobar_fecha(d, m, y):
@@ -98,6 +99,11 @@ def comprobar_fecha(d, m, y):
         comprobaciones = comprobaciones + 1
     if isinstance(y, int):
         comprobaciones = comprobaciones + 1
+    
+    if comprobaciones >= 3:
+        return 1
+    else:
+        return 0
     
 
 def cambiar_fondo_pantalla(ruta_imagen):
@@ -495,9 +501,10 @@ def procesar_comando(comando):
                                     month = None
                                     year= None
                                     day, month, year = dia_del_evento.split("/")
-                                    comprobar_fecha(day, month, year)
-                                f.write(f"{texto_evento + " " + dia_del_evento}")
-                                speak("evento creada")
+                                    comprobacionDeFecha = comprobar_fecha(day, month, year)
+                                    if comprobacionDeFecha == 1:
+                                        f.write(f"{texto_evento + " " + dia_del_evento}")
+                                        speak("evento creada")
                                 os.chdir(ruta_actual)
                             else:
                                 speak("no se pudo confirmar")
@@ -719,11 +726,14 @@ def main():
     speak("Buenos Días señor")
     while True:
         comando = escuchar_comando()
+        print(comando)
         if comando is not None:
+            print(comando)
             if "spot" in comando:
                 speak("Que quiere señor")
                 comando = escuchar_comando()
                 if comando is not None:
+                    print(comando)
                     if "salir" in comando or "adios" in comando or "buenas noches" in comando:
                         speak("Buenas noches señor")
                         procesar_comando(comando)
