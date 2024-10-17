@@ -13,98 +13,7 @@ import datetime as date
 
 
 
-def check_events():
-    day = date.datetime.today()
 
-
-
-def comprobar_fecha(d, m, y):
-    comprobaciones = 0
-    days = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-    months = {
-        "uno": "january",
-        "uno": "January",
-        "1": "january",
-        "1": "January",
-        "one": "february",
-        "one": "February",
-        "dos": "february",
-        "dos": "February",
-        "2": "february",
-        "2": "February",
-        "two": "february",
-        "two": "February",
-        "tres": "march",
-        "tres": "March",
-        "3": "march",
-        "3": "March",
-        "three": "march",
-        "Three": "march",
-        "quatro": "april",
-        "quatro": "April",
-        "4": "april",
-        "4": "April",
-        "four": "april",
-        "four": "April",
-        "cinco": "may",
-        "cinco": "May",
-        "5": "may",
-        "5": "May",
-        "seis": "june",
-        "seis": "June",
-        "6": "june",
-        "6": "June",
-        "six": "june",
-        "six": "June",
-        "siete": "july",
-        "siete": "July",
-        "7": "july",
-        "7": "July",
-        "seven": "july",
-        "seven": "July",
-        "ocho": "august",
-        "ocho": "August",
-        "8": "august",
-        "8": "August",
-        "eight": "august",
-        "eight": "August",
-        "nueve": "september",
-        "nueve": "September",
-        "9": "september",
-        "9": "September",
-        "nine": "september",
-        "nine": "September",
-        "diez": "october",
-        "diez": "October",
-        "10": "october",
-        "10": "October",
-        "ten": "october",
-        "ten": "October",
-        "onze": "november",
-        "onze": "November",
-        "11": "november",
-        "11": "November",
-        "eleven": "november",
-        "eleven": "November",
-        "doze": "december",
-        "doze": "December",
-        "12": "december",
-        "12": "December",
-        "twelve": "december",
-        "twelve": "December"
-    }
-    if days in d:
-        comprobaciones = comprobaciones + 1
-    if months in m:
-        comprobaciones = comprobaciones + 1
-    if isinstance(y, int):
-        comprobaciones = comprobaciones + 1
-    
-    if comprobaciones >= 3:
-        return 1
-    else:
-        return 0
-    
 
 def cambiar_fondo_pantalla(ruta_imagen):
     # Verifica si la ruta existe
@@ -190,6 +99,66 @@ def reproducir_musica(nombre_archivo):
             pygame.time.Clock().tick(10)
     except Exception as e:
         speak(f"Error al reproducir el archivo de música: {e}")
+
+
+def check_events():
+    day = date.datetime.today()
+
+
+
+def comprobar_fecha(d, m, y):
+    print(isinstance(y, int))
+    yearIsNum = isinstance(y, int)
+    comprobaciones = 0
+    days = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"]
+    months = {
+        "uno": "January",
+        "1": "January",
+        "one": "February",
+        "dos": "February",
+        "2": "February",
+        "two": "February",
+        "tres": "March",
+        "3": "March",
+        "Three": "march",
+        "quatro": "April",
+        "4": "April",
+        "four": "April",
+        "cinco": "May",
+        "5": "May",
+        "seis": "June",
+        "6": "June",
+        "six": "June",
+        "siete": "July",
+        "7": "July",
+        "seven": "July",
+        "ocho": "August",
+        "8": "August",
+        "eight": "August",
+        "nueve": "September",
+        "9": "September",
+        "nine": "September",
+        "diez": "October",
+        "10": "October",
+        "ten": "October",
+        "onze": "November",
+        "11": "November",
+        "eleven": "November",
+        "doze": "December",
+        "12": "December",
+        "twelve": "December",
+    }
+    if d in days:
+        comprobaciones = comprobaciones + 1
+    if m in months:
+        comprobaciones = comprobaciones + 1
+    if yearIsNum == True:
+        comprobaciones = comprobaciones + 1
+    
+    if comprobaciones >= 3:
+        return 1
+    else:
+        return 0
 
 
 def procesar_comando(comando):
