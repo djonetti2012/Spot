@@ -103,6 +103,17 @@ def reproducir_musica(nombre_archivo):
 
 def check_events():
     day = date.datetime.today()
+    day, basura = day.split(" ")
+    os.chdir(carpeta_calendario)
+    year, month, day = day.split("-")
+    eventos = os.listdir()
+    if eventos:
+        for event in eventos:
+             pass
+
+    
+
+
 
 
 
@@ -455,7 +466,6 @@ def procesar_comando(comando):
             confirmacion = escuchar_comando()
             if confirmacion is not None: 
                 if "sí" in confirmacion or "si" in confirmacion:
-                    f = open(f"{titulo_evento}.txt", "w")
                     speak("¿de que trata el evento?")
                     texto_evento = escuchar_comando()
                     if texto_evento is not None:
@@ -472,7 +482,8 @@ def procesar_comando(comando):
                                     day, month, year = dia_del_evento.split("/")
                                     comprobacionDeFecha = comprobar_fecha(day, month, year)
                                     if comprobacionDeFecha == 1:
-                                        f.write(f"{texto_evento + " " + dia_del_evento}")
+                                        f = open(f"{dia_del_evento}.txt", "w")
+                                        f.write(f"{titulo_evento + " " + texto_evento}")
                                         speak("evento creada")
                                 os.chdir(ruta_actual)
                             else:
