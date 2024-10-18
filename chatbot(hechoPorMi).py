@@ -106,6 +106,7 @@ def check_events():
     comprobacion = 0
     listaDeEventosDeHoy = []
     day = date.datetime.today()
+    day = str(day)
     day, basura = day.split(" ")
     os.chdir(carpeta_calendario)
     year, month, day = day.split("-")
@@ -124,7 +125,7 @@ def check_events():
                         contenido = f.read()
                         titulo, texto = contenido.split(" ")
                         listaDeEventosDeHoy.append(titulo)
-                        foto = r"C:\Users\ManelDíazGarcía\Downloads\calendario.cur"
+                        foto = r"C:\Users\juego\Downloads\calendario.cur"
 
                         notification.notify(
                         title = f'{titulo}',
