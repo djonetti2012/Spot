@@ -103,23 +103,29 @@ def reproducir_musica(nombre_archivo):
 
 
 def check_events():
-    comprobacion = 0
+    comprobacion = 1
     listaDeEventosDeHoy = []
     day = date.datetime.today()
     day = str(day)
+    print(day)
     day, basura = day.split(" ")
     os.chdir(carpeta_calendario)
     year, month, day = day.split("-")
     eventos = os.listdir()
+    print(day, month, year)
     if eventos:
         for event in eventos:
             dayevent, monthevent, yearevent = event.split("del")
+            print("event", dayevent, monthevent, yearevent)
             if dayevent in day:
                 comprobacion = comprobacion + 1
+                print(comprobacion)
             if monthevent in month:
                 comprobacion = comprobacion + 1
+                print(comprobacion)
             if yearevent in year:
                 comprobacion = comprobacion + 1
+                print(comprobacion)
             if comprobacion >= 3:
                 with open(event, "r") as f:
                         contenido = f.read()
@@ -137,7 +143,11 @@ def check_events():
     
     if listaDeEventosDeHoy == []:
         print("Hoy no hay ningun evento")
+        print(comprobacion)
         speak("Hoy no hay ningun evento")
+
+    else:
+        pass
 
             
              
@@ -734,7 +744,6 @@ def main():
     speak("Buenos Días señor")
     while True:
         comando = escuchar_comando()
-        print(comando)
         if comando is not None:
             print(comando)
             if "spot" in comando:
