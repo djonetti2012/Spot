@@ -52,7 +52,7 @@ reconocedor = sr.Recognizer()
 carpeta_notas = "notas"
 carpeta_musica = "musica"
 carpeta_webs = "webs"
-carpeta_calendario = "calendario"
+carpeta_calendario = "eventos"
 
 comandos = {
     "pregunta": "puedes preguntar cualquier cosa que la inteligencia artificial te lo respondera",
@@ -145,9 +145,10 @@ def check_events():
         print("Hoy no hay ningun evento")
         print(comprobacion)
         speak("Hoy no hay ningun evento")
+        os.chdir(ruta_actual)
 
     else:
-        pass
+        os.chdir(ruta_actual)
 
             
              
