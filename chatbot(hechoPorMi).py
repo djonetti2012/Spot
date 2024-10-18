@@ -10,6 +10,7 @@ import ctypes
 import re
 import winreg
 import datetime as date
+from plyer import notification
 
 
 
@@ -123,6 +124,15 @@ def check_events():
                         contenido = f.read()
                         titulo, texto = contenido.split(" ")
                         listaDeEventosDeHoy.append(titulo)
+                        foto = r"C:\Users\ManelDíazGarcía\Downloads\calendario.cur"
+
+                        notification.notify(
+                        title = f'{titulo}',
+                        message = f'{texto}',
+                        app_icon = foto,
+                        timeout = 10,
+)
+
     
     if listaDeEventosDeHoy == []:
         print("Hoy no hay ningun evento")
