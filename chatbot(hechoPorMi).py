@@ -510,7 +510,7 @@ def procesar_comando(comando):
                                     comprobacionDeFecha = comprobar_fecha(day, month, year)
                                     if comprobacionDeFecha == 1:
                                         f = open(f"{dia_del_evento}.txt", "w")
-                                        f.write(f"{titulo_evento + " " + texto_evento}")
+                                        f.write(f"{titulo_evento} + " " + {texto_evento}")
                                         speak("evento creada")
                                 os.chdir(ruta_actual)
                             else:
